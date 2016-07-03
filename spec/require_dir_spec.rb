@@ -9,11 +9,13 @@ describe RequireDir do
     expect(RequireDir::VERSION).not_to be nil
   end
 
-  it 'correctly calculates project folder' do
-    expect(TestModule.project_folder_from(source: __FILE__)).to eql(Dir.pwd + '/spec')
-  end
+  context '#project_folder_from' do
+    it 'correctly calculates project folder' do
+      expect(TestModule.project_folder_from(source: __FILE__)).to eql(Dir.pwd + '/spec')
+    end
 
-  it 'correctly calculates project folder using offset' do
-    expect(TestModule.project_folder_from(source: __FILE__, offset: 1)).to eql(Dir.pwd)
+    it 'correctly calculates project folder using offset' do
+      expect(TestModule.project_folder_from(source: __FILE__, offset: 1)).to eql(Dir.pwd)
+    end
   end
 end
