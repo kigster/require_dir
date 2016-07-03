@@ -1,6 +1,5 @@
 # RequireDir
 
-
 [![Gem Version](https://badge.fury.io/rb/require_dir.svg)](https://badge.fury.io/rb/require_dir)
 [![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/warp-    dir)
 [![Code Climate](https://codeclimate.com/github/kigster/require_dir/badges/gpa.svg)](https://codeclimate.com/githu    b/kigster/require_dir)
