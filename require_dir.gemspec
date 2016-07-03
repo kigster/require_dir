@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['kig@reinvent.one']
 
   spec.summary       = %q{Easily and non-intrusively require files from sub-folders}
-  spec.description   = %q{Without polluting global namespace, or having modules clobber each other, include RequireDir and initialize it to get access to #dir and #dir_r}
+  spec.description   = %q{Easily and non-intrusively require files from sub-folders. Without polluting global namespace, or having modules clobber each other, include RequireDir and initialize it to get access to #dir and #dir_r}
   spec.homepage      = 'https://github.com/kigster/require_dir'
   spec.license       = 'MIT'
 
