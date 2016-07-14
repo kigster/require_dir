@@ -17,7 +17,7 @@ Unlike other gems, such as `require_all`, this gem does suffer from module clobb
 
 ## Author
 
-This library is the work of [Konstantin Gredeskoul](http:/kig.re), &copy; 2016.
+This library is the work of [Konstantin Gredeskoul](http:/kig.re), &copy; 2016, distributed under the MIT license.
 
 ## Installation
 
@@ -44,7 +44,7 @@ Recommended usage is to include this gem's module into the top level module of y
 require 'require_dir'
 module Mylib
   extend RequireDir
-  init_from_source __FILE__
+  init __FILE__
 end
 
 Mylib.dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
@@ -52,6 +52,43 @@ Mylib.dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.r
 
 ```
 
+### Offset
+
+You can optionally load the library using `init_with_offset` method, which allows you 
+to initialize the library from a file located not directly under lib, but further down below.
+
+Say you want to initialize the library from `lib/mylib/subfolder/mymodule.rb`. But you want to 
+be able to later use RequireDir to load files relative to `lib`. This is how you would do that:
+
+
+```ruby
+# file 'lib/mylib/subfolder/mymodule.rb' -- top level file for a gem 'mylib'
+require 'require_dir'
+module Mylib
+  module SubFolder
+    extend RequireDir
+    init_with_offset(__FILE__, 1)
+  end
+end
+
+Mylib.dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
+Mylib.dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.rb'
+```
+
+### Load Errors
+
+The library attempts to catch load errors and print out (to STDERR) meaningful and colorful messages.
+
+But sometimes that's not enough – and you may want to see which file was RequireDir loading *just before* it
+exploded. You can enable debugging output using two methods:
+
+ * Set environment variable `REQUIRE_DIR_DEBUG` 
+ * Initialize library with options hash, setting:
+
+```ruby
+  extend RequireDir
+  init __FILE__, debug: true
+```
 
 ## Development
 
