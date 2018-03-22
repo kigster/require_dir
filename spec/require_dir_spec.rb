@@ -2,11 +2,23 @@ require 'spec_helper'
 
 describe RequireDir do
   module TestModule
-    extend RequireDir
+    RequireDir.enable_require_dir!(self, __FILE__)
   end
 
   it 'has a version number' do
     expect(RequireDir::VERSION).not_to be nil
+  end
+
+  context 'deprecated usage' do
+    before do
+      TestModule.instance_eval do
+        include RequireDir
+        init(__FILE__)
+      end
+    end
+    it 'still works despite deprecation' do
+      expect(TestModule).to respond_to(:init)
+    end
   end
 
   context '#project_folder_from' do

@@ -3,8 +3,6 @@
 [![Gem Version](https://badge.fury.io/rb/require_dir.svg)](https://badge.fury.io/rb/require_dir)
 [![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/require_dir?type=total)](https://rubygems.org/gems/require_dir)
 
-<br />
-
 [![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
 [![Code Climate](https://codeclimate.com/github/kigster/require_dir/badges/gpa.svg)](https://codeclimate.com/githb/kigster/require_dir)
 [![Test Coverage](https://codeclimate.com/github/kigster/require_dir/badges/coverage.svg)](https://codeclimate.com/github/kigster/require_dir/coverage)
@@ -17,7 +15,7 @@ Unlike other gems, such as `require_all`, this gem does suffer from module clobb
 
 ## Author
 
-This library is the work of [Konstantin Gredeskoul](http:/kig.re), &copy; 2016, distributed under the MIT license.
+This library is the work of [Konstantin Gredeskoul](http:/kig.re), &copy; 2016-2018, distributed under the MIT license.
 
 ## Installation
 
@@ -43,14 +41,16 @@ Recommended usage is to include this gem's module into the top level module of y
 # file 'lib/mylib.rb' -- top level file for a gem 'mylib'
 require 'require_dir'
 module Mylib
-  extend RequireDir
-  init __FILE__
+  RequireDir.enable_require_dir!(self, __FILE__)
 end
 
-Mylib.dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
-Mylib.dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.rb'
+Mylib.require_dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
+Mylib.require_dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.rb'
 
 ```
+
+You can also use shorcuts `dir` and `dir_r`, which are equivalent to `require_dir` and  `require_dir_r` respectively.
+
 
 ### Offset
 
@@ -66,8 +66,7 @@ be able to later use RequireDir to load files relative to `lib`. This is how you
 require 'require_dir'
 module Mylib
   module SubFolder
-    extend RequireDir
-    init_with_offset(__FILE__, 1)
+    RequireDir.enable_require_dir!(self, __FILE__, 1)
   end
 end
 
@@ -86,8 +85,7 @@ exploded. You can enable debugging output using two methods:
  * Initialize library with options hash, setting:
 
 ```ruby
-  extend RequireDir
-  init __FILE__, debug: true
+  RequireDir.enable_require_dir!(self, __FILE__, 0, debug: true)
 ```
 
 ## Development

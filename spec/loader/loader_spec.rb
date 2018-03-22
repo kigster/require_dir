@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 RSpec.describe 'RequireDir::Loader' do
-  context 'when loading files from a directory' do
-    before do
-      RequireDir.init_from_source(__FILE__, 2, { debug: ENV['DEBUG'] })
-    end
+  class Fubar
+    RequireDir.enable_require_dir!(self, __FILE__, 2, { debug: ENV['DEBUG'] })
+  end
 
+  context 'when loading files from a directory' do
     context 'using a non-recursive method #dir' do
       it 'should define constants defined in that folder, but not sub-folders' do
         expect(defined?(RequireDir::Tester)).to be_falsey
-        RequireDir.dir('spec/loader/loader-test')
+        Fubar.dir('spec/loader/loader-test')
         expect(defined?(RequireDir::Tester)).to be_truthy
         expect(defined?(RequireDir::Subfolder::Tester)).to be_falsey
       end
@@ -18,7 +18,7 @@ RSpec.describe 'RequireDir::Loader' do
     context 'using a recursive method #dir_r' do
       it 'should define constants defined in the folder and its subfolders' do
         expect(defined?(RequireDir::Subfolder)).to be_falsey
-        RequireDir.dir_r('spec/loader/loader-test')
+        Fubar.dir_r('spec/loader/loader-test')
         expect(defined?(RequireDir::Subfolder::Tester)).to be_truthy
       end
     end
@@ -26,12 +26,10 @@ RSpec.describe 'RequireDir::Loader' do
 
   context 'when included in multiple modules' do
     module Boo
-      extend RequireDir
-      init_from_source __FILE__, 2
+      RequireDir.enable_require_dir!(self, __FILE__, 2)
     end
     module Moo
-      extend RequireDir
-      init_from_source __FILE__
+      RequireDir.enable_require_dir!(self, __FILE__)
     end
 
     it 'should support different roots for each module' do
@@ -40,6 +38,21 @@ RSpec.describe 'RequireDir::Loader' do
       Moo.dir('loader-test/subfolder')
       Boo.dir('spec/loader/loader-test/subfolder')
       Moo.dir('loader-test/subfolder')
+    end
+  end
+
+  context 'when including a file with syntax erro' do
+    module Boo
+      RequireDir.enable_require_dir!(self, __FILE__, 2)
+    end
+
+    before do
+      Boo.loader.class.stderr = nil
+      expect(Boo.loader).to receive(:report_error).and_call_original
+    end
+
+    it 'should support different roots for each module' do
+      expect { Boo.dir('spec/loader/loader-error') }.to raise_error(SyntaxError)
     end
   end
 

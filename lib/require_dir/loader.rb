@@ -1,5 +1,5 @@
 require 'require_dir/version'
-
+require 'colored2'
 module RequireDir
   #
   # This class is meant to be instantiated per project/library, and then used to load
@@ -7,6 +7,12 @@ module RequireDir
   class Loader
 
     attr_accessor :project_root, :options
+
+    class << self
+      attr_accessor :stderr
+    end
+
+    self.stderr = STDERR
 
     def initialize(root_dir, options = {})
       raise ArgumentError.new("Folder #{root_dir} is not found") unless Dir.exist?(root_dir)
@@ -23,24 +29,35 @@ module RequireDir
       ::Dir.glob(project_root + folder + (recursive ? '/**/*.rb' : '/*.rb') ) do |file|
         puts "Loading #{file}" if debug?
         begin
-          Kernel.require(file)
+          Kernel.require file
         rescue SyntaxError, LoadError => e
-          len = file.length + 6
-          STDERR.puts '—' * len
-          STDERR.puts "⇨  #{file.bold.yellow} ⇦".bold.white
-          STDERR.puts '—' * len
-          STDERR.puts e.message.bold.red
-          STDERR.puts '—' * len
-          STDERR.puts e.backtrace.join("\n").bold.black if e.backtrace && !e.backtrace.empty?
-          exit 1
+          report_error(e, file)
+          raise(e)
         end
       end
-
-
     end
 
     def dir_r(folder)
       dir(folder, true)
+    end
+
+    alias require_dir dir
+    alias require_dir_r dir_r
+
+    private
+
+    def report_error(e, file)
+      len = file.length + 6
+      outputs '—' * len
+      outputs "⇨  #{file.bold.yellow} ⇦".bold.white
+      outputs '—' * len
+      outputs e.message.bold.red
+      outputs '—' * len
+      outputs e.backtrace.join("\n").bold.black if e.backtrace && !e.backtrace.empty?
+    end
+
+    def outputs(*args)
+      self.class.stderr.puts(*args) if self.class.stderr
     end
 
   end

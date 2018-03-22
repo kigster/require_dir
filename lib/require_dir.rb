@@ -1,28 +1,34 @@
+require 'forwardable'
+
 require 'require_dir/version'
 require 'require_dir/loader'
-require 'forwardable'
+require 'require_dir/initializer'
+
+
+#
+# This module should be used to enable directory-wide
+# requiring of dependent ruby files. Recursive is also supported.
+#
+# @example of the usage:
+#
+#        module Foo
+#          class Bar
+#             RequireDir.enable(self, __FILE__)
+#          end
+#        end
+#        Foo::Bar.dir()
 module RequireDir
-  attr_accessor :loader
+  class << self
+    # @deprecated Please use {#enable_require_dir!} instead
+    def included(klass)
+      klass.extend(RequireDir::Initializer)
+      klass.include(RequireDir::Initializer)
+    end
 
-  def project_folder_from(source: , offset: 0)
-    dirs_up = ''
-    offset.times { dirs_up << '/..' } if offset > 0
-    File.dirname(File.expand_path(source +  dirs_up))
+    def enable_require_dir!(klass, source_file, offset = 0, **options)
+      klass.extend(RequireDir::Initializer)
+      klass.include(RequireDir::Initializer)
+      klass.init(source_file, offset, options)
+    end
   end
-
-  def init_with_offset(source, offset = 0, options = {})
-    project_folder = project_folder_from(source: source, offset: offset)
-    self.loader = RequireDir::Loader.new(project_folder, options)
-  end
-
-  def init(source, options = {})
-    init_with_offset(source, 0, options)
-  end
-
-  alias_method :init_from_source, :init_with_offset
-
-  extend Forwardable
-  def_delegators :@loader, :dir, :dir_r
-
-  extend self
 end
