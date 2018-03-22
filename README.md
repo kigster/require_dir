@@ -3,9 +3,9 @@
 [![Gem Version](https://badge.fury.io/rb/require_dir.svg)](https://badge.fury.io/rb/require_dir)
 [![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/require_dir?type=total)](https://rubygems.org/gems/require_dir)
 
-[![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/warp-dir)
-[![Code Climate](https://codeclimate.com/github/kigster/require_dir/badges/gpa.svg)](https://codeclimate.com/githb/kigster/require_dir)
-[![Test Coverage](https://codeclimate.com/github/kigster/require_dir/badges/coverage.svg)](https://codeclimate.com/github/kigster/require_dir/coverage)
+[![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/require_dir)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/test_coverage)](https://codeclimate.com/github/kigster/require_dir/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/maintainability)](https://codeclimate.com/github/kigster/require_dir/maintainability)
 [![Issue Count](https://codeclimate.com/github/kigster/require_dir/badges/issue_count.svg)](https://codeclimate.com/github/kigster/require_dir)
 
 
