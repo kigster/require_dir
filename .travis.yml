@@ -1,23 +1,24 @@
 language: ruby
-env:
-  global:
-    - CODECLIMATE_REPO_TOKEN=703cb4759e977bdd9502305ae454a0acdf7bd0d51d418e88048110f4735c4a80
 rvm:
-  - 2.2.9
-  - 2.3.6
-  - 2.4.3
-  - 2.5.0
+- 2.2.9
+- 2.3.6
+- 2.4.3
+- 2.5.0
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
 script:
-  - bundle exec rspec
+- bundle exec rspec
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 notifications:
   email:
     recipients:
-      - kigster@gmail.com
+    - kigster@gmail.com
     on_success: change
     on_failure: always
+env:
+  global:
+    secure: KFl7jV0zv/OZ/Hi+IBI8fDaMEfWjbYOZBAmlPZp3N5A1YcHT/7oqGguUgrYWKfBM84CMZOzszKw7yVvzdn6pvate+0nP22hfwCwT6hRly56c/oMLJvm/Sud+hSsL7Aq7lZq3UeuDDUzPcoyCA6h3hqve4RX93w/A5a4yQYE6N8PJbyZwFZ+uf3MvnoyIRTFAW5Rjrk23ieSjBsG8zdIUabYahAGUkm0tZt7SXmEyFi5ghMpY8WFeUl3cwnlhVjYyZ+/qfTdzW1vFhJ11ZObrQPCaMb1te/Wh0/WoUE/ycbUPkxPWEfd7KDThb6x9QVzK28ssIgB1w7VmHpAa9h77vu9UaZvJTcS8Ud/gQaTE00VinEeK/wOA2CgLIcUnK4bjbCeZ+bgMjjKhN1JPJZvx+xsk19IHTT3DuQF+olkPJV3NU4o0ZjRBwbi4tNGuboJiDC+op/WiKDGsdTzSqA3TWNIQZzfVI+x64YcHZ5OjZHC1kNdeKd51kjITRbtp3RAepCeITQMZKLiS66k7tLtqkf8zMdkIUHFCBon5TXlclnVzCwqxtySk4RDOQ0ac0zgot/MnXXhEJkkgd9Qo+51Yd0DBCzkZgJfRWNKCv/MmAyn7K2kq3COfNDoS/C9JEQzFapj3CNdntdCZWHUTwiug0y/DBxSzyRagbwyoVObVBfY=
