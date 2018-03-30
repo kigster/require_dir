@@ -47,8 +47,8 @@ RSpec.describe 'RequireDir::Loader' do
     end
 
     before do
-      Boo.loader.class.stderr = nil
-      expect(Boo.loader).to receive(:report_error).and_call_original
+      expect(Boo.__require_dir_loader).to_not be_nil
+      expect(Boo.__require_dir_loader).to receive(:report_error)
     end
 
     it 'should support different roots for each module' do

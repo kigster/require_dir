@@ -41,15 +41,18 @@ Recommended usage is to include this gem's module into the top level module of y
 # file 'lib/mylib.rb' -- top level file for a gem 'mylib'
 require 'require_dir'
 module Mylib
+  # You must pass __FILE__ so that the library knows the "root" of your sources.
   RequireDir.enable_require_dir!(self, __FILE__)
+
+  dir_r 'mylib/cli'
+  dir   'mylib/commands'
 end
-
-Mylib.require_dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
-Mylib.require_dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.rb'
-
 ```
 
-You can also use shorcuts `dir` and `dir_r`, which are equivalent to `require_dir` and  `require_dir_r` respectively.
+You literally have access to two methods (with aliases):
+
+ * `dir_r` (or `require_dir_r`) loads all ruby files recursively
+ * `dir` (or `require_dir`) loads files non-recursively
 
 
 ### Offset
@@ -57,21 +60,21 @@ You can also use shorcuts `dir` and `dir_r`, which are equivalent to `require_di
 You can optionally load the library using `init_with_offset` method, which allows you 
 to initialize the library from a file located not directly under lib, but further down below.
 
-Say you want to initialize the library from `lib/mylib/subfolder/mymodule.rb`. But you want to 
-be able to later use RequireDir to load files relative to `lib`. This is how you would do that:
+Lets say we have a gem called `app-foo` and it's primary file is `app/foo`.
 
 
 ```ruby
-# file 'lib/mylib/subfolder/mymodule.rb' -- top level file for a gem 'mylib'
+# file 'lib/app/foo.rb' -- top level file for a gem 'mylib'
+
 require 'require_dir'
-module Mylib
-  module SubFolder
-    RequireDir.enable_require_dir!(self, __FILE__, 1)
+
+module App
+  module Foo
+    # offset is 1, because the current file is 1 level deep into the source tree.
+    RequireDir.enable_require_dir!(self, __FILE__, 1) 
+    dir_r 'app/foo/bar'   # loads all files in the folder 'app/foo/bar/**.rb'
   end
 end
-
-Mylib.dir('mylib/subfolder')   # loads all files in the folder 'lib/mylib/subfolder/*.rb'
-Mylib.dir_r('mylib/subfolder') # recursive load from 'lib/mylib/subfolder/**/*.rb'
 ```
 
 ### Load Errors
