@@ -1,13 +1,12 @@
-# RequireDir 
-
+[![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/require_dir)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/maintainability)](https://codeclimate.com/github/kigster/require_dir/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/test_coverage)](https://codeclimate.com/github/kigster/require_dir/test_coverage)    
 [![Gem Version](https://badge.fury.io/rb/require_dir.svg)](https://badge.fury.io/rb/require_dir)
 [![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/require_dir?type=total)](https://rubygems.org/gems/require_dir)
 
-[![Build Status](https://travis-ci.org/kigster/require_dir.svg?branch=master)](https://travis-ci.org/kigster/require_dir)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/test_coverage)](https://codeclimate.com/github/kigster/require_dir/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ad8aceb1bb3c22f72194/maintainability)](https://codeclimate.com/github/kigster/require_dir/maintainability)
-[![Issue Count](https://codeclimate.com/github/kigster/require_dir/badges/issue_count.svg)](https://codeclimate.com/github/kigster/require_dir)
+----
 
+# RequireDir 
 
 This gem provides an easy way to require all file from a folder – recursively, or not.
 
@@ -57,14 +56,14 @@ You literally have access to two methods (with aliases):
 
 ### Offset
 
-You can optionally load the library using `init_with_offset` method, which allows you 
-to initialize the library from a file located not directly under lib, but further down below.
-
-Lets say we have a gem called `app-foo` and it's primary file is `app/foo`.
-
+If your library's top required file is not at the very top level of the directory structure, 
+which might happen, if, say you have a gem named `app-foo`, and your primary required file is
+located in `lib/app/foo.rb`, in this case you will need to pass an offset of 1 to the `enable_require_dir!` 
+method to properly initialize recursive loading:
 
 ```ruby
-# file 'lib/app/foo.rb' -- top level file for a gem 'mylib'
+# 'lib/app/foo.rb' 
+# i.e. this file is one level deep in the source tree of this library:
 
 require 'require_dir'
 
@@ -72,6 +71,7 @@ module App
   module Foo
     # offset is 1, because the current file is 1 level deep into the source tree.
     RequireDir.enable_require_dir!(self, __FILE__, 1) 
+
     dir_r 'app/foo/bar'   # loads all files in the folder 'app/foo/bar/**.rb'
   end
 end
@@ -88,7 +88,9 @@ exploded. You can enable debugging output using two methods:
  * Initialize library with options hash, setting:
 
 ```ruby
+module Foo
   RequireDir.enable_require_dir!(self, __FILE__, 0, debug: true)
+end
 ```
 
 ## Development
